@@ -28,9 +28,31 @@ document.getElementById('search').addEventListener('keyup', (e) => {
 })
 
 
-// throttle
+// throttle prevent function from being calling too much -> scrolling (get called once in specific time)
 
-function(fn, delay) {
+function throttle(fn, delay) {
   let lastCall = 0;
 
+  return function(...args) {
+    const now = Date.now();
+
+    const ctx = this;
+
+    if (now - lastCall >= delay) {
+      lastCall = now;
+      fn.apply(ctx, args);
+    }
+
+  }
+
 }
+
+
+function handleScroll() {
+  console.log("scroll even at", window.screenY)
+}
+
+
+const throttledScroll = throttle(handleScroll, 200);
+
+window.addEventListener('scroll', throttledScroll)
